@@ -27,12 +27,12 @@ function draw() {
   background("#ffcccc");
   drawMeCursor();
   drawGuestCursors();
-  // // Display the proximity counter for the "me" cursor
-  // fill(0); // Set the fill color for the text to black
-  // noStroke(); // Ensure that there is no stroke around the text
-  // textSize(16); // Set the text size
-  // textAlign(LEFT, TOP); // Align the text to the top left
-  // text(`Proximity: ${me.proximity}`, 10, 10); // Position the text 10 pixels from the top and left of the canvas
+  // Display the proximity counter for the "me" cursor
+  fill(0); // Set the fill color for the text to black
+  noStroke(); // Ensure that there is no stroke around the text
+  textSize(16); // Set the text size
+  textAlign(LEFT, TOP); // Align the text to the top left
+  text(`Proximity: ${me.proximity}`, 10, 10); // Position the text 10 pixels from the top and left of the canvas
 }
 
 function drawMeCursor() {

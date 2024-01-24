@@ -1,14 +1,13 @@
-console.log("%c Reload! \n ", "background: #f00; color: #fff");
-
 let me;
 let guests;
 
 function preload() {
-  partyConnect("wss://demoserver.p5party.org", "cursors", "main");
+  partyConnect("wss://demoserver.p5party.org", "FB_emojicursors", "main");
   me = partyLoadMyShared({
     x: windowWidth / 2,
     y: windowHeight / 2,
     emoji: "🙁",
+    proximity: 0,
   });
   guests = partyLoadGuestShareds();
 }
@@ -18,49 +17,82 @@ function setup() {
   noStroke();
 }
 
-function mouseMoved(e) {
+function mouseMoved() {
   me.x = mouseX;
   me.y = mouseY;
   updateEmojiStates();
 }
 
-function updateEmojiStates() {
-  const allCursors = [me, ...guests];
-  // Reset emojis
-  allCursors.forEach((cursor) => (cursor.emoji = "🙁"));
+function draw() {
+  background("#ffcccc");
+  drawMeCursor();
+  drawGuestCursors();
+  // // Display the proximity counter for the "me" cursor
+  // fill(0); // Set the fill color for the text to black
+  // noStroke(); // Ensure that there is no stroke around the text
+  // textSize(16); // Set the text size
+  // textAlign(LEFT, TOP); // Align the text to the top left
+  // text(`Proximity: ${me.proximity}`, 10, 10); // Position the text 10 pixels from the top and left of the canvas
+}
 
-  // Check the distances and update emojis
+function drawMeCursor() {
+  fill("#ffffff"); // Color for the "me" cursor
+  textAlign(CENTER, CENTER);
+  textFont("sans-serif");
+  textSize(32);
+  text(me.emoji, me.x, me.y);
+}
+
+function drawGuestCursors() {
+  fill("#cc0000"); // Color for guest cursors
+  textAlign(CENTER, CENTER);
+  textFont("sans-serif");
+  textSize(32);
+  guests.forEach((guest) => {
+    text(guest.emoji, guest.x, guest.y);
+  });
+}
+
+function updateEmojiStates() {
+  // Reset proximity for all cursors
+  me.proximity = 0;
+  guests.forEach((guest) => (guest.proximity = 0));
+
+  // Combine me and guests into one array for easier processing
+  let allCursors = [me, ...guests];
+
+  // Calculate proximity for each cursor
   allCursors.forEach((cursor) => {
-    let closeCursors = 0;
-    allCursors.forEach((other) => {
-      if (cursor !== other) {
-        let d = dist(cursor.x, cursor.y, other.x, other.y);
-        if (d < 50) {
-          closeCursors++;
-        }
+    allCursors.forEach((otherCursor) => {
+      if (
+        cursor !== otherCursor &&
+        dist(cursor.x, cursor.y, otherCursor.x, otherCursor.y) < 50
+      ) {
+        cursor.proximity++;
       }
     });
+  });
 
-    if (closeCursors === 1) {
-      // If exactly one other cursor is close
+  // Update emojis based on proximity
+  allCursors.forEach((cursor) => {
+    if (cursor.proximity === 2) {
+      // Only one other cursor nearby
       cursor.emoji = "🙂";
-    } else if (closeCursors > 1) {
-      // If more than one cursor is close
+    } else if (cursor.proximity > 2) {
+      // Two or more other cursors nearby
       cursor.emoji = "🫨";
+    } else {
+      cursor.emoji = "🙁";
     }
   });
 }
 
-function draw() {
-  background("#ffcccc");
-  textAlign(CENTER, CENTER);
-  textFont("sans-serif");
-
-  // Draw each cursor with their updated emoji
-  [me, ...guests].forEach((cursor) => {
-    textSize(32); // Fixed size for emojis
-    text(cursor.emoji, cursor.x, cursor.y);
-  });
+function updateEmojiForCursor(cursor) {
+  if (cursor.proximity === 1) {
+    cursor.emoji = "🙂";
+  } else {
+    cursor.emoji = "🙁";
+  }
 }
 
 function windowResized() {

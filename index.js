@@ -17,7 +17,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight, WEBGL);
   noStroke();
 
   // Touch event handlers for mobile devices

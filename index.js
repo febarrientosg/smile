@@ -7,12 +7,8 @@ let distance = emojiSize - 5;
 let mouseYDistance = -25;
 
 function preload() {
-  partyConnect("wss://demoserver.p5party.org", "FB_emojicursors", "main");
-  me = partyLoadMyShared({
-    x: windowWidth / 2,
-    y: windowHeight / 2,
-    emoji: "😓",
-  });
+  partyConnect("wss://demoserver.p5party.org", "cursors");
+  me = partyLoadMyShared({ x: windowWidth / 2, y: windowHeight / 2 });
   guests = partyLoadGuestShareds();
 }
 
@@ -35,60 +31,43 @@ function mouseMoved() {
 
 function draw() {
   background("#ffcccc");
-  //displayGuestProximities();
-  updateGuestEmojis();
-  drawGuestCursors();
-}
 
-function drawGuestCursors() {
-  textAlign(CENTER, CENTER);
-  textFont("sans-serif");
+  // Create an array of all ellipses including 'me' and 'guests'
+  const allEllipses = [me, ...guests];
 
-  for (const guest of guests) {
-    fill("#cc0000");
-    textSize(emojiSize);
-    text(guest.emoji, guest.x, guest.y);
-  }
-}
+  // Set text properties
+  textAlign(CENTER, CENTER); // Align text to be centered
+  textFont("sans-serif"); // Use a font that supports emojis
 
-function updateGuestEmojis() {
-  guests.forEach((guest) => {
-    guest.proximity = 0;
-    guests.forEach((otherGuest) => {
-      if (
-        guest !== otherGuest &&
-        dist(guest.x, guest.y, otherGuest.x, otherGuest.y) < distance
-      ) {
-        guest.proximity++;
+  // Iterate over each ellipse to calculate size and emoji based on distance to nearest ellipse
+  for (const me of allEllipses) {
+    let minDist = Infinity;
+
+    // Calculate the distance to every other ellipse
+    for (const other of allEllipses) {
+      if (me !== other) {
+        let d = dist(me.x, me.y, other.x, other.y);
+        if (d < minDist) {
+          minDist = d;
+        }
       }
-    });
-    guest.emoji = getEmoji(guest.proximity);
-  });
-}
+    }
 
-function getEmoji(proximity) {
-  if (proximity === 0) {
-    return "😓";
-  } else if (proximity === 1) {
-    return "🙂";
-  } else if (proximity > 1) {
-    return "🫨";
+    // Determine the size of the emoji based on the closest distance
+    let size = 30; // Start with a default font size
+    if (minDist < 150) {
+      size += (150 - minDist) / 4; // Adjust size based on proximity
+    }
+
+    // Choose emoji based on proximity
+    let emoji = minDist < 50 ? "🙂" : "🙁";
+
+    // Set the font size
+    textSize(size);
+
+    // Draw the emoji at the position with the calculated size
+    text(emoji, me.x, me.y - 20);
   }
-}
-
-function displayGuestProximities() {
-  fill(0);
-  noStroke();
-  textSize(16);
-  textAlign(LEFT, TOP);
-
-  let yOffset = 10; // Starting y offset for the guest proximity displays
-
-  // Display proximity for each guest cursor
-  guests.forEach((guest, index) => {
-    text(`Guest ${index} Proximity: ${guest.proximity}`, 10, yOffset);
-    yOffset += 20; // Increment the y offset for the next guest proximity display
-  });
 }
 
 function windowResized() {

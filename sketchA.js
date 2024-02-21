@@ -11,7 +11,7 @@ function preload() {
   me = partyLoadMyShared({
     x: windowWidth / 2,
     y: windowHeight / 2,
-    emoji: "😓",
+    emoji: "A",
   });
   guests = partyLoadGuestShareds();
 }
@@ -68,7 +68,7 @@ function updateGuestEmojis() {
 
 function getEmoji(proximity) {
   if (proximity === 0) {
-    return "😓";
+    return "A";
   } else if (proximity === 1) {
     return "🙂";
   } else if (proximity > 1) {

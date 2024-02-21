@@ -14,7 +14,21 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
-    <script src="index.js"></script>
+    <script src="sketchA.js"></script>
+    <script src="sketchB.js"></script>
+    <script>
+      // Check the feature flag when the page has loaded
+      window.onload = function() {
+        if (posthog.getFeatureFlag('emoji_test') === 'test') {
+          // Load Sketch A if the feature flag 'emoji_test' value is 'test'
+          new p5(sketchA, 'sketch-container');
+        } else {
+          // Load Sketch B as the default or control variant
+          new p5(sketchB, 'sketch-container');
+        }
+      };
+    </script>
+    
     <style>
       /* Reset default margin and padding */
       html,

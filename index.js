@@ -72,6 +72,8 @@ function getEmoji(proximity) {
   } else if (proximity === 1) {
     return "🙂";
   } else if (proximity > 1) {
+    // The condition for the "🫨" emoji
+    posthog.capture("emoji_appeared", { emoji: "🫨", proximity: proximity });
     return "🫨";
   }
 }

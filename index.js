@@ -68,12 +68,16 @@ function updateGuestEmojis() {
 
 function getEmoji(proximity) {
   if (proximity === 0) {
+    // Capture event for "😓" emoji
+    posthog.capture("emoji_1", { emoji: "😓", proximity: proximity });
     return "😓";
   } else if (proximity === 1) {
+    // Capture event for "🙂" emoji
+    posthog.capture("emoji_2", { emoji: "🙂", proximity: proximity });
     return "🙂";
   } else if (proximity > 1) {
-    // The condition for the "🫨" emoji
-    posthog.capture("emoji_appeared", { emoji: "🫨", proximity: proximity });
+    // Capture event for "🫨" emoji
+    posthog.capture("emoji_3", { emoji: "🫨", proximity: proximity });
     return "🫨";
   }
 }

@@ -2,33 +2,79 @@
 <html>
   <head>
     <title>Smile</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
     <script>
-      !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-      posthog.init('phc_EILzjLJvzN5AyLqEVkCLF4OnntIzL2SXSiGhhCtFnwO',{api_host:'https://app.posthog.com'})
-  </script>
+      !(function (t, e) {
+        var o, n, p, r;
+        e.__SV ||
+          ((window.posthog = e),
+          (e._i = []),
+          (e.init = function (i, s, a) {
+            function g(t, e) {
+              var o = e.split(".");
+              2 == o.length && ((t = t[o[0]]), (e = o[1])),
+                (t[e] = function () {
+                  t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+                });
+            }
+            ((p = t.createElement("script")).type = "text/javascript"),
+              (p.async = !0),
+              (p.src = s.api_host + "/static/array.js"),
+              (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r);
+            var u = e;
+            for (
+              void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+                u.people = u.people || [],
+                u.toString = function (t) {
+                  var e = "posthog";
+                  return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e;
+                },
+                u.people.toString = function () {
+                  return u.toString(1) + ".people (stub)";
+                },
+                o =
+                  "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(
+                    " "
+                  ),
+                n = 0;
+              n < o.length;
+              n++
+            )
+              g(u, o[n]);
+            e._i.push([i, s, a]);
+          }),
+          (e.__SV = 1));
+      })(document, window.posthog || []);
+      posthog.init("phc_EILzjLJvzN5AyLqEVkCLF4OnntIzL2SXSiGhhCtFnwO", {
+        api_host: "https://app.posthog.com",
+      });
+    </script>
+    <script src="sketchA.js"></script>
+    <!-- <script>
+      // Wait until PostHog feature flags are loaded
+      posthog.onFeatureFlags(function () {
+        var script = document.createElement("script");
+
+        // Check the feature flag and set the script source accordingly
+        if (posthog.getFeatureFlag("ab_test1") == "altA") {
+          // Load Sketch A script if the feature flag value is 'altA'
+          script.src = "sketchA.js";
+        } else {
+          // Load Sketch B script if the feature flag value is not 'altA'
+          script.src = "sketchB.js";
+        }
+
+        // Append the script tag to the <head>
+        document.head.appendChild(script);
+      });
+    </script> -->
   </head>
   <body>
     <main></main>
     <div id="source-javascript"></div>
     <div id="source-html"></div>
-    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
-    <script src="sketchA.js"></script>
-    <script src="sketchB.js"></script>
-    <script>
-      // Check the feature flag when the page has loaded
-      window.onload = function() {
-        if (posthog.getFeatureFlag('emoji_test') === 'test') {
-          // Load Sketch A if the feature flag 'emoji_test' value is 'test'
-          new p5(sketchA, 'sketch-container');
-        } else {
-          // Load Sketch B as the default or control variant
-          new p5(sketchB, 'sketch-container');
-        }
-      };
-    </script>
-    
     <style>
       /* Reset default margin and padding */
       html,

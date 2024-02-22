@@ -55,10 +55,7 @@ function updateGuestEmojis() {
   guests.forEach((guest) => {
     guest.proximity = 0;
     guests.forEach((otherGuest) => {
-      if (
-        guest !== otherGuest &&
-        dist(guest.x, guest.y, otherGuest.x, otherGuest.y) < distance
-      ) {
+      if (guest !== otherGuest && dist(guest.x, guest.y, otherGuest.x, otherGuest.y) < distance) {
         guest.proximity++;
       }
     });
@@ -73,7 +70,7 @@ function getEmoji(proximity) {
     return "🙂";
   } else if (proximity > 1) {
     // The condition for the "🫨" emoji
-    posthog.capture("emoji_appeared", { emoji: "🫨", proximity: proximity });
+    // posthog.capture("emoji_appeared", { emoji: "🫨", proximity: proximity });
     return "🫨";
   }
 }

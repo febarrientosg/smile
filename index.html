@@ -50,24 +50,17 @@
       posthog.init("phc_EILzjLJvzN5AyLqEVkCLF4OnntIzL2SXSiGhhCtFnwO", {
         api_host: "https://app.posthog.com",
       });
-    </script>
-    <!-- <script src="sketchA.js"></script> -->
-    <script>
-      // Wait until PostHog feature flags are loaded
+
+      console.log("hola");
       posthog.onFeatureFlags(function () {
-        var script = document.createElement("script");
-
-        // Check the feature flag and set the script source accordingly
-        if (posthog.getFeatureFlag("ab_test1") == "altA") {
-          // Load Sketch A script if the feature flag value is 'altA'
-          script.src = "sketchA.js";
-        } else {
-          // Load Sketch B script if the feature flag value is not 'altA'
-          script.src = "sketchB.js";
+        if (posthog.getFeatureFlag("multiVariant") == "altA") {
+          console.log("altA");
         }
-
-        // Append the script tag to the <head>
-        document.head.appendChild(script);
+      });
+      posthog.onFeatureFlags(function () {
+        if (posthog.getFeatureFlag("multiVariant") == "altB") {
+          console.log("altB");
+        }
       });
     </script>
   </head>
@@ -76,15 +69,14 @@
     <div id="source-javascript"></div>
     <div id="source-html"></div>
     <style>
-      /* Reset default margin and padding */
       html,
       body {
         margin: 0;
         padding: 0;
-        overflow: hidden; /* Hide scrollbars */
+        overflow: hidden;
       }
       canvas {
-        display: block; /* Remove bottom margin/canvas gap */
+        display: block;
       }
     </style>
   </body>

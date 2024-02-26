@@ -52,12 +52,16 @@
       });
       console.log("hola");
       posthog.onFeatureFlags(function () {
+        var script = document.createElement("script");
         if (posthog.getFeatureFlag("abTest") === "test") {
+          script.src = "sketchA.js";
           console.log("test");
         }
         if (posthog.getFeatureFlag("abTest") === "control") {
+          script.src = "sketchB.js";
           console.log("control");
         }
+        document.head.appendChild(script);
       });
     </script>
   </head>
@@ -65,6 +69,7 @@
     <main></main>
     <div id="source-javascript"></div>
     <div id="source-html"></div>
+    <div id="sketch-container"></div>
     <style>
       html,
       body {

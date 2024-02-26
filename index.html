@@ -51,12 +51,14 @@
         api_host: "https://app.posthog.com",
       });
       console.log("hola");
-      if (posthog.getFeatureFlag("abTest") === "test") {
-        console.log("test");
-      }
-      if (posthog.getFeatureFlag("abTest") === "control") {
-        console.log("control");
-      }
+      posthog.onFeatureFlags(function () {
+        if (posthog.getFeatureFlag("abTest") === "test") {
+          console.log("test");
+        }
+        if (posthog.getFeatureFlag("abTest") === "control") {
+          console.log("control");
+        }
+      });
     </script>
   </head>
   <body>

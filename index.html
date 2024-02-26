@@ -2,9 +2,6 @@
 <html>
   <head>
     <title>Smile</title>
-    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
     <script>
       !(function (t, e) {
         var o, n, p, r;
@@ -51,6 +48,11 @@
         api_host: "https://app.posthog.com",
       });
     </script>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
     <script>
       posthog.onFeatureFlags(function () {
         var script = document.createElement("script");
@@ -64,9 +66,6 @@
         document.head.appendChild(script);
       });
     </script>
-  </head>
-  <body>
-    <main></main>
     <div id="source-javascript"></div>
     <div id="source-html"></div>
     <style>

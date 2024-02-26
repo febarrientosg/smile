@@ -50,18 +50,13 @@
       posthog.init("phc_EILzjLJvzN5AyLqEVkCLF4OnntIzL2SXSiGhhCtFnwO", {
         api_host: "https://app.posthog.com",
       });
-
       console.log("hola");
-      posthog.onFeatureFlags(function () {
-        if (posthog.getFeatureFlag("multiVariant") == "altA") {
-          console.log("altA");
-        }
-      });
-      posthog.onFeatureFlags(function () {
-        if (posthog.getFeatureFlag("multiVariant") == "altB") {
-          console.log("altB");
-        }
-      });
+      if (posthog.getFeatureFlag("abTest") === "test") {
+        console.log("test");
+      }
+      if (posthog.getFeatureFlag("abTest") === "control") {
+        console.log("control");
+      }
     </script>
   </head>
   <body>

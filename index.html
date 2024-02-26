@@ -53,10 +53,10 @@
       console.log("hola");
       posthog.onFeatureFlags(function () {
         var script = document.createElement("script");
-        if (posthog.getFeatureFlag("abTest") === "control") {
+        if (posthog.getFeatureFlag("abTest2") === "control") {
           script.src = "sketchA.js";
           console.log("control");
-        } else if (posthog.getFeatureFlag("abTest") === "test") {
+        } else if (posthog.getFeatureFlag("abTest2") === "test") {
           script.src = "sketchB.js";
           console.log("test");
         }

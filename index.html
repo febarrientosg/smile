@@ -50,7 +50,8 @@
       posthog.init("phc_EILzjLJvzN5AyLqEVkCLF4OnntIzL2SXSiGhhCtFnwO", {
         api_host: "https://app.posthog.com",
       });
-      console.log("hola");
+    </script>
+    <script>
       posthog.onFeatureFlags(function () {
         var script = document.createElement("script");
         if (posthog.getFeatureFlag("abTest2") === "control") {
@@ -60,14 +61,6 @@
           script.src = "sketchB.js";
           console.log("test");
         }
-        // if (posthog.getFeatureFlag("abTest") === "control") {
-        //   script.src = "sketchA.js";
-        //   console.log("control");
-        // }
-        // if (posthog.getFeatureFlag("abTest") === "test") {
-        //   script.src = "sketchB.js";
-        //   console.log("test");
-        // }
         document.head.appendChild(script);
       });
     </script>

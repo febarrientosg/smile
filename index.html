@@ -50,17 +50,17 @@
     </script>
   </head>
   <body>
-    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script> -->
     <script>
       posthog.onFeatureFlags(function () {
         var script = document.createElement("script");
         if (posthog.getFeatureFlag("abTest2") === "control") {
-          script.src = "sketchA.js";
+          window.location.href = "sketchA.html";
           console.log("control");
         } else if (posthog.getFeatureFlag("abTest2") === "test") {
-          script.src = "sketchB.js";
+          window.location.href = "sketchB.html";
           console.log("test");
         }
         document.head.appendChild(script);
@@ -68,6 +68,7 @@
     </script>
     <div id="source-javascript"></div>
     <div id="source-html"></div>
+    <p>Loading your personalized experience...</p>
     <style>
       html,
       body {

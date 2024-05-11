@@ -71,7 +71,7 @@ function draw() {
 
 function mouseMoved() {
   me.x = mouseX;
-  me.y = mouseY;
+  me.y = mouseY - 20;
 }
 
 function drawGuestCursors() {

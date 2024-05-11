@@ -1,17 +1,18 @@
 let input;
+let button;
 let me;
 let guests;
 let messages = [];
-let emojiSize = 50; // Adjusted for visual clarity
-let distance = 46; // Proximity distance for emoji changes
+let emojiSize = 30;
+let distance = 100;
 
 function preload() {
   partyConnect("wss://demoserver.p5party.org", "p5_messaging_app", "mainB");
   me = partyLoadMyShared({
     x: windowWidth / 2,
     y: windowHeight / 2,
-    emoji: "🙁", // Initial emoji for each user
-    color: color(random(255), random(255), random(255)).toString("#rrggbb"), // Random color for text identifier
+    emoji: "",
+    color: color(random(255), random(255), random(255)).toString("#rrggbb"),
   });
   guests = partyLoadGuestShareds();
 }
@@ -27,7 +28,15 @@ function setup() {
 
   input = createInput();
   input.parent("sketch-input");
-  input.style("width", "100%");
+  input.style("width", "calc(100% - 60px)"); // Adjust width to leave space for the button
+
+  button = createButton("Send");
+  button.parent("sketch-input");
+  button.style("width", "60px"); // Set the width of the button
+  button.mousePressed(sendMessage); // Use the same sendMessage function
+  button.style("background-color", "#386a20"); // Background color of the button
+  button.style("color", "white"); // Text color
+
   input.elt.onkeypress = function (e) {
     if (e.keyCode == 13) {
       e.preventDefault();
@@ -42,27 +51,27 @@ function setup() {
 
 function draw() {
   background("#e1e1e1");
-  updateGuestEmojis(); // Update emojis based on proximity
-  drawGuestCursors(); // Draw emojis for each user
+  updateGuestEmojis();
+  drawGuestCursors();
   noStroke();
   textAlign(LEFT, BOTTOM);
   textSize(16);
 
-  let y = height - 10; // Start drawing from the bottom
+  let y = height - 10;
   for (let i = messages.length - 1; i >= 0; i--) {
     let msgObj = messages[i];
     fill(msgObj.color);
-    ellipse(13, y - 9, 15, 15); // Draw the user identifier ellipse
+    ellipse(13, y - 9, 15, 15);
     fill("black");
     text(msgObj.text, 25, y);
-    y -= 30; // Adjust vertical spacing
+    y -= 30;
     if (y < 0) break;
   }
 }
 
 function mouseMoved() {
   me.x = mouseX;
-  me.y = mouseY - 25;
+  me.y = mouseY;
 }
 
 function drawGuestCursors() {
@@ -82,24 +91,24 @@ function updateGuestEmojis() {
         guest.proximity++;
       }
     });
-    guest.emoji = getEmoji(guest.proximity); // Determine emoji based on proximity count
+    guest.emoji = getEmoji(guest.proximity);
   });
 }
 
 function getEmoji(proximity) {
   if (proximity === 0) {
-    return "🌈";
+    return "";
   } else if (proximity === 1) {
-    return "🍓";
+    return "";
   } else if (proximity > 1) {
-    return "🥐";
+    return "";
   }
 }
 
 function displayMessage(messageObj) {
   messages.push(messageObj);
   if (messages.length > 100) {
-    messages.shift(); // Manage message overflow
+    messages.shift();
   }
 }
 
@@ -110,7 +119,7 @@ function sendMessage() {
       guestID: me.id,
       text: messageText,
       color: me.color,
-      emoji: me.emoji, // Include emoji in the message object
+      emoji: me.emoji,
     };
     partyEmit("newMessage", messageObj);
     input.value("");

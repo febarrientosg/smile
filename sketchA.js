@@ -3,8 +3,8 @@ let button;
 let me;
 let guests;
 let messages = [];
-let emojiSize = 30;
-let distance = 100;
+let emojiSize = 45;
+let distance = 41;
 
 function preload() {
   partyConnect("wss://demoserver.p5party.org", "p5_messaging_app", "mainA");

@@ -1,52 +1,75 @@
-// Emojis with 3 states depending on their distance.
-
+let input;
 let me;
 let guests;
-let emojiSize = 50;
-let distance = emojiSize - 5;
-let mouseYDistance = -25;
+let messages = [];
+let emojiSize = 50; // Adjusted for visual clarity
+let distance = 46; // Proximity distance for emoji changes
 
 function preload() {
-  partyConnect("wss://demoserver.p5party.org", "FB_emojicursors", "main");
+  partyConnect("wss://demoserver.p5party.org", "p5_messaging_app", "mainB");
   me = partyLoadMyShared({
     x: windowWidth / 2,
     y: windowHeight / 2,
-    emoji: "B",
+    emoji: "🙁", // Initial emoji for each user
+    color: color(random(255), random(255), random(255)).toString("#rrggbb"), // Random color for text identifier
   });
   guests = partyLoadGuestShareds();
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  noStroke();
+  pixelDensity(2);
+  let sketchContainer = document.getElementById("sketch-container");
+  let canvas = createCanvas(sketchContainer.offsetWidth, windowHeight - 36);
+  canvas.parent("sketch-container");
+  textSize(17);
 
-  // Touch event handlers for mobile devices
-  touchMoved = touchStarted = function () {
-    me.x = touches[0].x;
-    me.y = touches[0].y - 40;
-    return false; // Prevent default
+  partySubscribe("newMessage", displayMessage);
+
+  input = createInput();
+  input.parent("sketch-input");
+  input.style("width", "100%");
+  input.elt.onkeypress = function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      sendMessage();
+    }
   };
+
+  window.addEventListener("resize", () => {
+    resizeCanvas(sketchContainer.offsetWidth, windowHeight - 36);
+  });
+}
+
+function draw() {
+  background("#e1e1e1");
+  updateGuestEmojis(); // Update emojis based on proximity
+  drawGuestCursors(); // Draw emojis for each user
+  noStroke();
+  textAlign(LEFT, BOTTOM);
+  textSize(16);
+
+  let y = height - 10; // Start drawing from the bottom
+  for (let i = messages.length - 1; i >= 0; i--) {
+    let msgObj = messages[i];
+    fill(msgObj.color);
+    ellipse(13, y - 9, 15, 15); // Draw the user identifier ellipse
+    fill("black");
+    text(msgObj.text, 25, y);
+    y -= 30; // Adjust vertical spacing
+    if (y < 0) break;
+  }
 }
 
 function mouseMoved() {
   me.x = mouseX;
-  me.y = mouseY + mouseYDistance;
-}
-
-function draw() {
-  background("#ffcccc");
-  //displayGuestProximities();
-  updateGuestEmojis();
-  drawGuestCursors();
+  me.y = mouseY - 25;
 }
 
 function drawGuestCursors() {
   textAlign(CENTER, CENTER);
-  textFont("sans-serif");
+  textSize(emojiSize);
 
   for (const guest of guests) {
-    fill("#cc0000");
-    textSize(emojiSize);
     text(guest.emoji, guest.x, guest.y);
   }
 }
@@ -59,37 +82,37 @@ function updateGuestEmojis() {
         guest.proximity++;
       }
     });
-    guest.emoji = getEmoji(guest.proximity);
+    guest.emoji = getEmoji(guest.proximity); // Determine emoji based on proximity count
   });
 }
 
 function getEmoji(proximity) {
   if (proximity === 0) {
-    return "B";
+    return "🌈";
   } else if (proximity === 1) {
-    return "🙂";
+    return "🍓";
   } else if (proximity > 1) {
-    // The condition for the "🫨" emoji
-    // posthog.capture("emoji_appeared", { emoji: "🫨", proximity: proximity });
-    return "🫨";
+    return "🥐";
   }
 }
 
-function displayGuestProximities() {
-  fill(0);
-  noStroke();
-  textSize(16);
-  textAlign(LEFT, TOP);
-
-  let yOffset = 10; // Starting y offset for the guest proximity displays
-
-  // Display proximity for each guest cursor
-  guests.forEach((guest, index) => {
-    text(`Guest ${index} Proximity: ${guest.proximity}`, 10, yOffset);
-    yOffset += 20; // Increment the y offset for the next guest proximity display
-  });
+function displayMessage(messageObj) {
+  messages.push(messageObj);
+  if (messages.length > 100) {
+    messages.shift(); // Manage message overflow
+  }
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+function sendMessage() {
+  let messageText = input.value().trim();
+  if (messageText !== "") {
+    let messageObj = {
+      guestID: me.id,
+      text: messageText,
+      color: me.color,
+      emoji: me.emoji, // Include emoji in the message object
+    };
+    partyEmit("newMessage", messageObj);
+    input.value("");
+  }
 }
